@@ -5,7 +5,7 @@ from pathlib import Path
 st.title("Restaurant Performance Overview")
 st.write("Business KPI Dashboard")
 
-csv_path = Path("orders_final.csv")
+csv_path = Path("dashboard_data.csv")
 
 df = pd.read_csv(csv_path)
 
