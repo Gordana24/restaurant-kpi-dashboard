@@ -5,7 +5,7 @@ from pathlib import Path
 st.title("Restaurant Performance Overview")
 st.write("Business KPI Dashboard")
 
-csv_path = Path("/Users/goga/Documents/GitHub/AI_Forecasting/data/IndiskSales2023_2025_BackUp/street food/street food/streetfood_orders_dashboard.csv")
+csv_path = Path("cleaned_historical_sales.csv")
 
 df = pd.read_csv(csv_path)
 
