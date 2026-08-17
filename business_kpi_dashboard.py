@@ -5,7 +5,7 @@ from pathlib import Path
 st.title("Restaurant Performance Overview")
 st.write("Business KPI Dashboard")
 
-csv_path = Path("dashboard_data.csv")
+csv_path = Path("streetfood_orders_dashboard.csv")
 
 df = pd.read_csv(csv_path)
 
@@ -65,7 +65,8 @@ with col2:
     st.subheader("Sales by Daypart")
 
     filtered_df["hour"] = pd.to_datetime(
-        filtered_df["time"].astype(str)
+        filtered_df["time"],
+        format="mixed"
     ).dt.hour
 
     def get_daypart(hour):
@@ -75,7 +76,7 @@ with col2:
             return "Afternoon"
         else:
             return "Evening"
-        
+
     filtered_df["Daypart"] = filtered_df["hour"].apply(get_daypart)
 
     revenue_by_daypart = (
@@ -87,21 +88,25 @@ with col2:
     daypart_chart = alt.Chart(revenue_by_daypart).mark_bar().encode(
         x=alt.X("Daypart:N", title="Daypart"),
         y=alt.Y("totalAmount:Q", title="Revenue (DKK)"),
+
         tooltip=[
             alt.Tooltip("Daypart:N"),
             alt.Tooltip("totalAmount:Q", format=",.0f")
         ]
     )
-
     st.altair_chart(daypart_chart, use_container_width=True)
+
+            
+    
+    
 
 # KPI 3 - Revenue by Category
 col3, col4 = st.columns(2)
+
 with col3:
-
     st.subheader("Revenue by Category")
-
     revenue_by_category = (
+
         filtered_df.groupby("category")["totalAmount"]
         .sum()
         .reset_index()
@@ -111,6 +116,7 @@ with col3:
         x=alt.X("category:N", title="Category", sort="-y"),
         y=alt.Y("totalAmount:Q", title="Revenue (DKK)"),
         tooltip=[
+
             alt.Tooltip("category:N", title="Category"),
             alt.Tooltip("totalAmount:Q", title="Revenue (DKK)", format=",.0f")
         ]
@@ -118,9 +124,9 @@ with col3:
 
     st.altair_chart(category_chart, use_container_width=True)
 
-# KPI 4 - Average Orders per Day
-with col4:
-    with st.container(border=True):
+
+    # KPI 4 - Average Orders per Day
+    with col4:
         st.subheader("Average Orders per Day")
 
         orders_per_day = (
